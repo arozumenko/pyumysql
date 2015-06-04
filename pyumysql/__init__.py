@@ -101,6 +101,7 @@ class PyUltraMySQL(object):
                     new_args.append("'"+args+"'")
                 else:
                     new_args.append(args)
+            logging.info(query)
             query = query % tuple(new_args)
         logging.info(query)
         self.res = self.__connect__.query(query)
