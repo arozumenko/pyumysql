@@ -62,7 +62,7 @@ class PyUltraMySQL(object):
 
     def select_db(self, db):
         """Set db"""
-        self.execute("use %s" % db)
+        self.execute("use %s;" % db)
 
     def close(self):
         try:
@@ -105,6 +105,8 @@ class PyUltraMySQL(object):
             query = query % tuple(new_args)
         logging.info(query)
         try:
+            if not query.endswith(';'):
+                query += ';'
             self.res = self.__connect__.query(query.encode('utf-8'))
         except ValueError:
             print "This was an exception: %s " % query.encode('utf-8')
