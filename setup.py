@@ -11,7 +11,8 @@ setup(name='pyumysql',
       version=version,
       packages=[
           'pyumysql',
-          'pyumysql.constants'],
+          'pyumysql.constants',
+          'pyumysql.cursors'],
       install_requires=install_requires,
       # Metadata.
       description='Wrapper for ultamysql to provide minimum set of pymysql '

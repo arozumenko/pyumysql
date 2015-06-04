@@ -116,6 +116,10 @@ class cursors(object):
     def Cursor(self):
         return False
 
+    @property
+    def BaseCursor(self):
+        return False
+
 
 def connect(db, host="localhost", port=3306, user="root", passwd="root"):
     return PyUltraMySQL(db, host, port, user, passwd)
