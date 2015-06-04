@@ -104,7 +104,7 @@ class PyUltraMySQL(object):
             logging.info(query)
             query = query % tuple(new_args)
         logging.info(query)
-        self.res = self.__connect__.query(query)
+        self.res = self.__connect__.query(query.encode('utf-8'))
         try:
             if self.__cursor__ == 'dict':
                 self.res = self._transform_to_json(self.res)
