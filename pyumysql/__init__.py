@@ -121,7 +121,8 @@ class cursors(object):
         return False
 
 
-def connect(db, host="localhost", port=3306, user="root", passwd="root"):
+def connect(db, host="localhost", port=3306, user="root", passwd="root",
+            *args, **kwags):
     return PyUltraMySQL(db, host, port, user, passwd)
 
 
