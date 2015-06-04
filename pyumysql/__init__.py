@@ -104,6 +104,9 @@ class PyUltraMySQL(object):
         return self.res.pop(0) if self.__cursor__ != 'list' else \
             self.res['rows'].pop(0)
 
+    def commit(self):
+        pass
+
     def fetch_row(self):
         return self.fetch_one()
 
