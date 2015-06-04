@@ -1,3 +1,4 @@
 __author__ = 'arozumenko'
-DictCursor = True
-Cursor = BaseCursor = False
+DictCursor = "dict"
+BaseCursor = "base"
+Cursor = "list"

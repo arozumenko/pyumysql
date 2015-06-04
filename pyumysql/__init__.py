@@ -31,24 +31,29 @@ class PyUltraMySQL(object):
         if db_database:
             self.__connect__.connect(db_host, db_port, db_user, db_password,
                                      db_database)
-        self.__dict_cursor__ = False
+        self.__cursor__ = 'base' #dict, base, etc.
         self.res = None
 
 
     @property
     def DictCursor(self):
-        self.__dict_cursor__ = True
+        self.__cursor__ = "dict"
         return self
 
     @property
     def Cursor(self):
-        self.__dict_cursor__ = False
+        self.__cursor__ = "list"
+        return self
+
+    @property
+    def BaseCursor(self):
+        self.__cursor__ = "base"
         return self
 
     def cursor(self, cursor=None):
         """ Basically just a mock for cursor. """
         if cursor:
-            self.__dict_cursor__ = cursor
+            self.__cursor__ = cursor
             return self
         return self
 
@@ -84,14 +89,19 @@ class PyUltraMySQL(object):
             if '%' in query:
                 query = query % args
         self.res = self.__connect__.query(query)
-        self.res = self._transform_to_list_of_lists(self.res) if not \
-            self.__dict_cursor__ else self._transform_to_json(self.res)
+        try:
+            if self.__cursor__ == 'dict':
+                self.res = self._transform_to_json(self.res)
+            if self.__cursor__ == 'list':
+                self.res = self._transform_to_list_of_lists(self.res)
+        except AttributeError:
+            pass
 
     def fetch_all(self):
-        return self.res if self.__dict_cursor__ else self.res['rows']
+        return self.res if self.__cursor__ != 'list' else self.res['rows']
 
     def fetch_one(self):
-        return self.res.pop(0) if self.__dict_cursor__ else \
+        return self.res.pop(0) if self.__cursor__ != 'list' else \
             self.res['rows'].pop(0)
 
     def fetch_row(self):
@@ -110,15 +120,15 @@ class PyUltraMySQL(object):
 class cursors(object):
     @property
     def DictCursor(self):
-        return True
+        return "dict"
 
     @property
     def Cursor(self):
-        return False
+        return "list"
 
     @property
     def BaseCursor(self):
-        return False
+        return "base"
 
 
 def connect(db, host="localhost", port=3306, user="root", passwd="root",
