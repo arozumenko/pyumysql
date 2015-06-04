@@ -85,9 +85,14 @@ class PyUltraMySQL(object):
         return res
 
     def execute(self, query, args=None):
-        if args:
-            if '%' in query:
-                query = query % args
+        new_args = []
+        if args is not None:
+            for each in args:
+                if isinstance(each, str) or isinstance(each, basestring):
+                    new_args.append("'"+each+"'")
+                else:
+                    new_args.append(each)
+            query = query % tuple(new_args)
         self.res = self.__connect__.query(query)
         try:
             if self.__cursor__ == 'dict':
