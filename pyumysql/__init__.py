@@ -13,6 +13,9 @@
 #  limitations under the License.
 
 import umysql
+import logging
+
+logger = logging.getLogger()
 
 class PyUltraMySQL(object):
     ##################################################
@@ -93,12 +96,13 @@ class PyUltraMySQL(object):
                         new_args.append("'"+each+"'")
                     else:
                         new_args.append(each)
-                query = query % tuple(new_args)
             else:
                 if isinstance(args, str) or isinstance(args, basestring):
                     new_args.append("'"+args+"'")
                 else:
                     new_args.append(args)
+            query = query % tuple(new_args)
+        logging.info(query)
         self.res = self.__connect__.query(query)
         try:
             if self.__cursor__ == 'dict':
