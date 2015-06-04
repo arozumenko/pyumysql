@@ -116,8 +116,11 @@ class PyUltraMySQL(object):
         return self.res if self.__cursor__ != 'list' else self.res['rows']
 
     def fetch_one(self):
-        return self.res.pop(0) if self.__cursor__ != 'list' else \
-            self.res['rows'].pop(0)
+        if self.res:
+            return self.res.pop(0) if self.__cursor__ != 'list' else \
+                self.res['rows'].pop(0)
+        else:
+            return self.res if self.__cursor__ != 'list' else []
 
     def commit(self):
         pass
