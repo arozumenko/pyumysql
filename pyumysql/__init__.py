@@ -90,20 +90,22 @@ class PyUltraMySQL(object):
     def execute(self, query, args=None):
         new_args = []
         if args is not None:
-            if isinstance(args, tuple):
-                for each in args:
-                    if isinstance(each, str) or isinstance(each, basestring):
-                        new_args.append("'"+each+"'")
-                    else:
-                        new_args.append(each)
-            else:
-                if isinstance(args, str) or isinstance(args, basestring):
-                    new_args.append("'"+args+"'")
-                else:
-                    new_args.append(args)
-            logging.info(query)
-            query = query % tuple(new_args)
-        logging.info(query)
+            # if isinstance(args, tuple):
+            #     for each in args:
+            #         if isinstance(each, str) or isinstance(each, basestring):
+            #             new_args.append("'"+each+"'")
+            #         else:
+            #             new_args.append(each)
+            # else:
+            #     if isinstance(args, str) or isinstance(args, basestring):
+            #         new_args.append("`"+args+"`")
+            #     else:
+            #         new_args.append(args)
+            # logging.info(query)
+            # query = query % tuple(new_args)
+            if not isinstance(args, tuple):
+                args = tuple(args)
+        logging.info(query, args)
         try:
             if not query.endswith(';'):
                 query += ';'
