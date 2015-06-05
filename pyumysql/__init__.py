@@ -120,6 +120,7 @@ class PyUltraMySQL(object):
     def commit(self):
         pass
 
+    @property
     def rowcount(self):
         return len(self.res)
 
