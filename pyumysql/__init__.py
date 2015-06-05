@@ -96,13 +96,10 @@ class PyUltraMySQL(object):
             logging.error( "This was an exception: %s \n Args: "
                            "%s" % (query, args))
             raise
-        try:
-            if self.__cursor__ == 'dict':
-                self.res = self._transform_to_json(self.res)
-            if self.__cursor__ in ('base', 'list'):
-                self.res = self.res.rows
-        except AttributeError:
-            pass
+        if self.__cursor__ == 'dict':
+            self.res = self._transform_to_json(self.res)
+        if self.__cursor__ in ('base', 'list'):
+            self.res = self.res.rows
 
     def fetch_all(self):
         return self.res
