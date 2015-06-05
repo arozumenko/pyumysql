@@ -1,1 +1,1 @@
-__all__ = ['ER']
+__all__ = ['ER', 'FIELD_TYPE', 'FLAG']
