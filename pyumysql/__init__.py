@@ -100,22 +100,15 @@ class PyUltraMySQL(object):
             if self.__cursor__ == 'dict':
                 self.res = self._transform_to_json(self.res)
             if self.__cursor__ in ('base', 'list'):
-                self.res = self.res.keys
+                self.res = self.res.rows
         except AttributeError:
             pass
 
     def fetch_all(self):
-        if self.__cursor__ in ('base', 'list'):
-            return self.res
         return self.res
 
     def fetch_one(self):
-        if self.res:
-            if self.__cursor__ in ('base', 'list'):
-                return self.res.pop(0)
-            return self.res.pop(0)
-        else:
-            return self.res if self.__cursor__ != 'list' else []
+        return self.res.pop() if self.res else []
 
     def commit(self):
         pass
