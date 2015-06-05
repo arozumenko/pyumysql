@@ -102,7 +102,7 @@ class PyUltraMySQL(object):
             elif self.__cursor__ in ('base', 'list'):
                 self.res = self.res.rows
         else:
-            logging.info("Tuple res: %s" % self.res)
+            logging.info("Tuple res: %s" % str(self.res))
 
     def fetch_all(self):
         return self.res
