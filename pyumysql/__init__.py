@@ -24,7 +24,7 @@ class PyUltraMySQL(object):
     #
     ##################################################
     def __init__(self, db_database, db_host=None, db_port=None,
-                 db_user=None, db_password=None):
+                 db_user=None, db_password=None, charset='utf8'):
         db_user = db_user if db_user else "root"
         db_password = db_password if isinstance(db_password, basestring) \
             else ""
@@ -33,7 +33,7 @@ class PyUltraMySQL(object):
         self.__connect__ = umysql.Connection()
         if db_database:
             self.__connect__.connect(db_host, db_port, db_user, db_password,
-                                     db_database)
+                                     db_database, charset=charset)
         self.__cursor__ = 'base' #dict, base, etc.
         self.res = None
 
@@ -142,7 +142,7 @@ class cursors(object):
 
 def connect(db, host="localhost", port=3306, user="root", passwd="root",
             *args, **kwags):
-    return PyUltraMySQL(db, host, port, user, passwd)
+    return PyUltraMySQL(db, host, port, user, passwd, *args, **kwags)
 
 
 Connection = Connect = connect
