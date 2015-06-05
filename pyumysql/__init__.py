@@ -94,7 +94,10 @@ class PyUltraMySQL(object):
                 query += ';'
         logging.info(query)
         try:
-            self.res = self.__connect__.query(query, args)
+            if args:
+                self.res = self.__connect__.query(query, args)
+            else:
+                self.res = self.__connect__.query(query)
         except ValueError:
             print "This was an exception: %s " % query.encode('utf-8')
             raise
