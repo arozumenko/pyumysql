@@ -81,7 +81,7 @@ class PyUltraMySQL(object):
         return res_json
 
     def execute(self, query, args=None):
-        query = query.replace('\n', '').replace('          ', ' ')
+        query = query.replace('\n', '').replace('             ', ' ').strip()
         if args is not None and not isinstance(args, tuple):
             args = (args,)
         if args:
@@ -134,18 +134,10 @@ class PyUltraMySQL(object):
         return self.fetch_one()
 
 
-class cursors(object):
-    @property
-    def DictCursor(self):
-        return "dict"
-
-    @property
-    def Cursor(self):
-        return "list"
-
-    @property
-    def BaseCursor(self):
-        return "base"
+# class cursors(object):
+#     DictCursor = "dict"
+#     Cursor = "list"
+#     BaseCursor = "base"
 
 
 def connect(db, host="localhost", port=3306, user="root", passwd="root",
