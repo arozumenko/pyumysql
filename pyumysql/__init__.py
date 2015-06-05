@@ -88,28 +88,13 @@ class PyUltraMySQL(object):
         return res
 
     def execute(self, query, args=None):
-        new_args = []
-        if args is not None:
-            # if isinstance(args, tuple):
-            #     for each in args:
-            #         if isinstance(each, str) or isinstance(each, basestring):
-            #             new_args.append("'"+each+"'")
-            #         else:
-            #             new_args.append(each)
-            # else:
-            #     if isinstance(args, str) or isinstance(args, basestring):
-            #         new_args.append("`"+args+"`")
-            #     else:
-            #         new_args.append(args)
-            # logging.info(query)
-            # query = query % tuple(new_args)
-            if not isinstance(args, tuple):
-                args = tuple(args)
-        logging.info(query, args)
-        try:
-            if not query.endswith(';'):
+        if args is not None and not isinstance(args, tuple):
+            args = tuple(args)
+        if not query.endswith(';'):
                 query += ';'
-            self.res = self.__connect__.query(query.encode('utf-8'))
+        logging.info(query)
+        try:
+            self.res = self.__connect__.query(query, args)
         except ValueError:
             print "This was an exception: %s " % query.encode('utf-8')
             raise
