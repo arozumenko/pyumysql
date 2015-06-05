@@ -134,10 +134,10 @@ class PyUltraMySQL(object):
         return self.fetch_one()
 
 
-# class cursors(object):
-#     DictCursor = "dict"
-#     Cursor = "list"
-#     BaseCursor = "base"
+class cursors(object):
+    DictCursor = "dict"
+    Cursor = "list"
+    BaseCursor = "base"
 
 
 def connect(db, host="localhost", port=3306, user="root", passwd="root",
