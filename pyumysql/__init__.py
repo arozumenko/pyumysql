@@ -33,7 +33,7 @@ class PyUltraMySQL(object):
         self.__connect__ = umysql.Connection()
         if db_database:
             self.__connect__.connect(db_host, db_port, db_user, db_password,
-                                     db_database, charset=charset)
+                                     db_database, True, charset)
         self.__cursor__ = 'base' #dict, base, etc.
         self.res = None
 
