@@ -34,9 +34,11 @@ class PyUltraMySQL(object):
         db_host = db_host if db_host else "localhost"
         db_port = db_port if db_port else 3306
         self.__connect__ = umysql.Connection()
+        self.__autocommit__ = True
         if db_database:
             self.__connect__.connect(db_host, db_port, db_user, db_password,
-                                     db_database, False, 'utf8mb4')
+                                     db_database, self.__autocommit__,
+                                     'utf8mb4')
         self.__cursor__ = cursorclass #dict, base, etc.
         self.res = None
 
@@ -56,6 +58,9 @@ class PyUltraMySQL(object):
         self.__cursor__ = "base"
         return self
 
+    def autocommit(self, bool_val):
+        pass
+
     def cursor(self, cursor=None):
         """ Basically just a mock for cursor. """
         if cursor:
@@ -71,7 +76,8 @@ class PyUltraMySQL(object):
         pass
 
     def commit(self):
-        self.execute("COMMIT")
+        if not self.__autocommit__:
+            self.execute("COMMIT")
 
     @staticmethod
     def _transform_to_json(result):
