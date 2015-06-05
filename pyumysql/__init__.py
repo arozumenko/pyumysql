@@ -81,12 +81,10 @@ class PyUltraMySQL(object):
         return res_json
 
     def execute(self, query, args=None):
-        query = query.replace('\n', '')
+        query = query.replace('\n', '').replace('          ', ' ')
         if args is not None and not isinstance(args, tuple):
             args = (args,)
-        if not query.endswith(';'):
-                query += ';'
-        logging.info(query)
+        logging.info(query % args)
         try:
             if args:
                 self.res = self.__connect__.query(query.encode('utf-8'), args)
