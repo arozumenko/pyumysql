@@ -89,7 +89,7 @@ class PyUltraMySQL(object):
 
     def execute(self, query, args=None):
         if args is not None and not isinstance(args, tuple):
-            args = tuple(args)
+            args = (args,)
         if not query.endswith(';'):
                 query += ';'
         logging.info(query)
