@@ -91,12 +91,10 @@ class PyUltraMySQL(object):
                 self.res = self.__connect__.query(query, args)
             else:
                 self.res = self.__connect__.query(query)
-        except ValueError:
-            print "This was an exception: %s \n Args: " \
-                  "%s" % (query.encode('utf-8'), args)
+        except (ValueError, SQLError):
+            logging.error( "This was an exception: %s \n Args: "
+                           "%s" % (query, args))
             raise
-        except SQLError:
-
         try:
             if self.__cursor__ == 'dict':
                 self.res = self._transform_to_json(self.res)
