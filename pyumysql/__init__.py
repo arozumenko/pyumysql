@@ -65,10 +65,11 @@ class PyUltraMySQL(object):
         self.execute("use %s;" % db)
 
     def close(self):
-        try:
-            self.__connect__.close()
-        except:
-            pass
+        # try:
+        #     self.__connect__.close()
+        # except:
+        #     pass
+        pass
 
     @staticmethod
     def _transform_to_json(result):
