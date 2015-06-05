@@ -35,7 +35,7 @@ class PyUltraMySQL(object):
         self.__connect__ = umysql.Connection()
         if db_database:
             self.__connect__.connect(db_host, db_port, db_user, db_password,
-                                     db_database, True, 'utf8mb4')
+                                     db_database, False, 'utf8mb4')
         self.__cursor__ = 'base' #dict, base, etc.
         self.res = None
 
@@ -64,14 +64,13 @@ class PyUltraMySQL(object):
 
     def select_db(self, db):
         """Set db"""
-        self.execute("use %s;" % db)
+        self.execute("use %s" % db)
 
     def close(self):
-        # try:
-        #     self.__connect__.close()
-        # except:
-        #     pass
         pass
+
+    def commit(self):
+        self.execute("COMMIT")
 
     @staticmethod
     def _transform_to_json(result):
@@ -86,15 +85,17 @@ class PyUltraMySQL(object):
     def execute(self, query, args=None):
         if args is not None and not isinstance(args, (tuple, list)):
             args = (args,)
-        #logging.debug(query % args if args else query)
+
         try:
             if args:
+                logging.debug(query % args)
                 self.res = self.__connect__.query(query, args)
             else:
+                logging.debug(query)
                 self.res = self.__connect__.query(query)
         except (ValueError, SQLError):
-            logging.error( "This was an exception: %s \n Args: "
-                           "%s" % (query, args))
+            logging.error("This was an exception: %s \n Args: "
+                          "%s" % (query, args))
             raise
         if not isinstance(self.res, tuple):
             if self.__cursor__ == 'dict':
@@ -102,17 +103,14 @@ class PyUltraMySQL(object):
             elif self.__cursor__ in ('base', 'list'):
                 self.res = self.res.rows
         else:
-            logging.info("Tuple res: %s" % str(self.res))
-            logging.info("Query was: %s" % str(query))
+            logging.debug("Tuple res: %s" % str(self.res))
+            logging.debug("Query was: %s" % str(query))
 
     def fetch_all(self):
         return self.res
 
     def fetch_one(self):
         return self.res.pop() if self.res else []
-
-    def commit(self):
-        pass
 
     @property
     def rowcount(self):
