@@ -14,6 +14,7 @@
 
 import umysql
 import logging
+from umysql import SQLError
 
 logger = logging.getLogger()
 
@@ -82,12 +83,9 @@ class PyUltraMySQL(object):
         return res_json
 
     def execute(self, query, args=None):
-        if args is not None and not isinstance(args, tuple):
+        if args is not None and not isinstance(args, (tuple, list)):
             args = (args,)
-        if args:
-            logging.info(query % args)
-        else:
-            logging.info(query)
+        logging.debug(query % args if args else query)
         try:
             if args:
                 self.res = self.__connect__.query(query, args)
@@ -97,6 +95,8 @@ class PyUltraMySQL(object):
             print "This was an exception: %s \n Args: " \
                   "%s" % (query.encode('utf-8'), args)
             raise
+        except SQLError:
+
         try:
             if self.__cursor__ == 'dict':
                 self.res = self._transform_to_json(self.res)
