@@ -99,7 +99,8 @@ class PyUltraMySQL(object):
             else:
                 self.res = self.__connect__.query(query)
         except ValueError:
-            print "This was an exception: %s " % query.encode('utf-8')
+            print "This was an exception: %s \n Args: " \
+                  "%s" % (query.encode('utf-8'), args)
             raise
         try:
             if self.__cursor__ == 'dict':
