@@ -82,7 +82,6 @@ class PyUltraMySQL(object):
         return res_json
 
     def execute(self, query, args=None):
-        query = query.replace('\n', ' ').replace('             ', ' ').strip()
         if args is not None and not isinstance(args, tuple):
             args = (args,)
         if args:
