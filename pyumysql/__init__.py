@@ -15,6 +15,7 @@
 import umysql
 import logging
 from umysql import SQLError
+from .converters import escape_dict, escape_sequence, escape_string
 
 logger = logging.getLogger()
 
@@ -85,7 +86,7 @@ class PyUltraMySQL(object):
     def execute(self, query, args=None):
         if args is not None and not isinstance(args, (tuple, list)):
             args = (args,)
-        logging.debug(query % args if args else query)
+        #logging.debug(query % args if args else query)
         try:
             if args:
                 self.res = self.__connect__.query(query, args)
