@@ -120,6 +120,9 @@ class PyUltraMySQL(object):
     def commit(self):
         pass
 
+    def rowcount(self):
+        return len(self.res)
+
     def fetch_row(self):
         return self.fetch_one()
 
