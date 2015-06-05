@@ -80,13 +80,6 @@ class PyUltraMySQL(object):
             res_json.append(tmp_res)
         return res_json
 
-    @staticmethod
-    def _transform_to_list_of_lists(result):
-        res = dict(fields=result.fields, rows=[])
-        for each in result.rows:
-            res['rows'].append(each)
-        return res
-
     def execute(self, query, args=None):
         if args is not None and not isinstance(args, tuple):
             args = (args,)
@@ -95,9 +88,9 @@ class PyUltraMySQL(object):
         logging.info(query)
         try:
             if args:
-                self.res = self.__connect__.query(query, args)
+                self.res = self.__connect__.query(query.encode('utf-8'), args)
             else:
-                self.res = self.__connect__.query(query)
+                self.res = self.__connect__.query(query.encode('utf-8'))
         except ValueError:
             print "This was an exception: %s \n Args: " \
                   "%s" % (query.encode('utf-8'), args)
@@ -105,18 +98,21 @@ class PyUltraMySQL(object):
         try:
             if self.__cursor__ == 'dict':
                 self.res = self._transform_to_json(self.res)
-            if self.__cursor__ == 'list':
-                self.res = self._transform_to_list_of_lists(self.res)
+            if self.__cursor__ in ('base', 'list'):
+                self.res = self.res.keys
         except AttributeError:
             pass
 
     def fetch_all(self):
-        return self.res if self.__cursor__ != 'list' else self.res['rows']
+        if self.__cursor__ in ('base', 'list'):
+            return self.res
+        return self.res
 
     def fetch_one(self):
         if self.res:
-            return self.res.pop(0) if self.__cursor__ != 'list' else \
-                self.res['rows'].pop(0)
+            if self.__cursor__ in ('base', 'list'):
+                return self.res.pop(0)
+            return self.res.pop(0)
         else:
             return self.res if self.__cursor__ != 'list' else []
 
