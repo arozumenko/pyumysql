@@ -84,7 +84,10 @@ class PyUltraMySQL(object):
         query = query.replace('\n', '').replace('          ', ' ')
         if args is not None and not isinstance(args, tuple):
             args = (args,)
-        logging.info(query % args)
+        if args:
+            logging.info(query % args)
+        else:
+            logging.info(query)
         try:
             if args:
                 self.res = self.__connect__.query(query.encode('utf-8'), args)
