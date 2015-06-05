@@ -103,6 +103,7 @@ class PyUltraMySQL(object):
                 self.res = self.res.rows
         else:
             logging.info("Tuple res: %s" % str(self.res))
+            logging.info("Query was: %s" % str(query))
 
     def fetch_all(self):
         return self.res
