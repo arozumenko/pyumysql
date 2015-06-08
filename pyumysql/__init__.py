@@ -37,34 +37,25 @@ class PyUltraMySQL(object):
         self.__autocommit__ = autocommit
         self.db_database = db_database
         self.charset = charset
-        if db_database:
-            self.__connect__.connect(self.db_host, self.db_port, self.db_user,
-                                     self.db_password, self.db_database,
-                                     self.__autocommit__, self.charset)
-        self.__cursor__ = cursorclass #dict, base, etc.
+
+        self.__cursor__ = cursorclass # dict, base, etc.
         self.res = None
 
 
     @property
     def DictCursor(self):
         self.__cursor__ = "dict"
-        return PyUltraMySQL(self.db_database, self.db_host, self.db_port,
-                            self.db_user, self.db_password, self.charset,
-                            self.__cursor__, self.__autocommit__)
+        return self
 
     @property
     def Cursor(self):
         self.__cursor__ = "list"
-        return PyUltraMySQL(self.db_database, self.db_host, self.db_port,
-                            self.db_user, self.db_password, self.charset,
-                            self.__cursor__, self.__autocommit__)
+        return self
 
     @property
     def BaseCursor(self):
         self.__cursor__ = "base"
-        return PyUltraMySQL(self.db_database, self.db_host, self.db_port,
-                            self.db_user, self.db_password, self.charset,
-                            self.__cursor__, self.__autocommit__)
+        return self
 
     def autocommit(self, bool_val):
         self.__cursor__ = bool_val
@@ -73,7 +64,10 @@ class PyUltraMySQL(object):
         """ Basically just a mock for cursor. """
         if cursor:
             self.__cursor__ = cursor
-            return self
+        if self.db_database:
+            self.__connect__.connect(self.db_host, self.db_port, self.db_user,
+                                     self.db_password, self.db_database,
+                                     self.__autocommit__, self.charset)
         return self
 
     def select_db(self, db):
@@ -81,7 +75,10 @@ class PyUltraMySQL(object):
         self.execute("use %s" % db)
 
     def close(self):
-        self.__connect__.close()
+        try:
+            self.__connect__.close()
+        except:
+            pass
 
     def commit(self):
         if not self.__autocommit__:
@@ -112,12 +109,13 @@ class PyUltraMySQL(object):
             logging.error("This was an exception: %s \n Args: "
                           "%s" % (query, args))
             raise
+
         if not isinstance(self.res, tuple):
             if self.__cursor__ == 'dict':
                 self.res = self._transform_to_json(self.res)
             elif self.__cursor__ in ('base', 'list'):
                 self.res = self.res.rows
-            return self.res
+
         else:
             logging.debug("Tuple res: %s" % str(self.res))
             logging.debug("Query was: %s" % str(query))
