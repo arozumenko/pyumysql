@@ -63,10 +63,15 @@ class PyUltraMySQL(object):
         """ Basically just a mock for cursor. """
         if cursor:
             self.__cursor__ = cursor
-        if self.db_database:
-            self.__connect__.connect(self.db_host, self.db_port, self.db_user,
-                                     self.db_password, self.db_database,
-                                     self.__autocommit__, self.charset)
+        try:
+            if self.db_database:
+                self.__connect__.connect(self.db_host, self.db_port,
+                                         self.db_user, self.db_password,
+                                         self.db_database, self.__autocommit__,
+                                         self.charset)
+        except:
+            self.close()
+            return self.cursor(self.__cursor__)
         return self
 
     def select_db(self, db):
