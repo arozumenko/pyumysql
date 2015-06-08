@@ -95,10 +95,10 @@ class PyUltraMySQL(object):
 
         try:
             if args:
-                logging.debug(query % args)
+                #logging.debug(query % args)
                 self.res = self.__connect__.query(query, args)
             else:
-                logging.debug(query)
+                #logging.debug(query)
                 self.res = self.__connect__.query(query)
         except (ValueError, SQLError):
             logging.error("This was an exception: %s \n Args: "
@@ -109,6 +109,7 @@ class PyUltraMySQL(object):
                 self.res = self._transform_to_json(self.res)
             elif self.__cursor__ in ('base', 'list'):
                 self.res = self.res.rows
+            return self.res
         else:
             logging.debug("Tuple res: %s" % str(self.res))
             logging.debug("Query was: %s" % str(query))
