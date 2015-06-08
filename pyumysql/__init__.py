@@ -37,22 +37,24 @@ class PyUltraMySQL(object):
         self.__autocommit__ = autocommit
         self.db_database = db_database
         self.charset = charset
-
         self.__cursor__ = cursorclass # dict, base, etc.
         self.res = None
 
 
     @property
     def DictCursor(self):
-        return "dict"
+        self.__cursor__ = "dict"
+        return self
 
     @property
     def Cursor(self):
-        return "list"
+        self.__cursor__ = "list"
+        return self
 
     @property
     def BaseCursor(self):
-        return "base"
+        self.__cursor__ = "base"
+        return self
 
     def autocommit(self, bool_val):
         self.__cursor__ = bool_val
