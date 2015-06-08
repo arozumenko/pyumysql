@@ -75,10 +75,11 @@ class PyUltraMySQL(object):
         self.execute("use %s" % db)
 
     def close(self):
-        try:
-            self.__connect__.close()
-        except:
-            pass
+        # try:
+        #     self.__connect__.close()
+        # except:
+        #     pass
+        pass
 
     def commit(self):
         if not self.__autocommit__:
