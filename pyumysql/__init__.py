@@ -28,17 +28,19 @@ class PyUltraMySQL(object):
     def __init__(self, db_database, db_host=None, db_port=None,
                  db_user=None, db_password=None, charset='utf8',
                  cursorclass='base', autocommit=False):
-        db_user = db_user if db_user else "root"
-        db_password = db_password if isinstance(db_password, basestring) \
+        self.db_user = db_user if db_user else "root"
+        self.db_password = db_password if isinstance(db_password, basestring) \
             else ""
-        db_host = db_host if db_host else "localhost"
-        db_port = db_port if db_port else 3306
+        self.db_host = db_host if db_host else "localhost"
+        self.db_port = db_port if db_port else 3306
         self.__connect__ = umysql.Connection()
         self.__autocommit__ = autocommit
+        self.db_database = db_database
+        self.charset = charset
         if db_database:
-            self.__connect__.connect(db_host, db_port, db_user, db_password,
-                                     db_database, self.__autocommit__,
-                                     charset)
+            self.__connect__.connect(self.db_host, self.db_port, self.db_user,
+                                     self.db_password, self.db_database,
+                                     self.__autocommit__, self.charset)
         self.__cursor__ = cursorclass #dict, base, etc.
         self.res = None
 
@@ -46,20 +48,26 @@ class PyUltraMySQL(object):
     @property
     def DictCursor(self):
         self.__cursor__ = "dict"
-        return self
+        return PyUltraMySQL(self.db_database, self.db_host, self.db_port,
+                            self.db_user, self.db_password, self.charset,
+                            self.__cursor__, self.__autocommit__)
 
     @property
     def Cursor(self):
         self.__cursor__ = "list"
-        return self
+        return PyUltraMySQL(self.db_database, self.db_host, self.db_port,
+                            self.db_user, self.db_password, self.charset,
+                            self.__cursor__, self.__autocommit__)
 
     @property
     def BaseCursor(self):
         self.__cursor__ = "base"
-        return self
+        return PyUltraMySQL(self.db_database, self.db_host, self.db_port,
+                            self.db_user, self.db_password, self.charset,
+                            self.__cursor__, self.__autocommit__)
 
     def autocommit(self, bool_val):
-        pass
+        self.__cursor__ = bool_val
 
     def cursor(self, cursor=None):
         """ Basically just a mock for cursor. """
@@ -73,7 +81,7 @@ class PyUltraMySQL(object):
         self.execute("use %s" % db)
 
     def close(self):
-        pass
+        self.__connect__.close()
 
     def commit(self):
         if not self.__autocommit__:
