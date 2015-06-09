@@ -7,12 +7,11 @@ install_requires = [
 
 version = '0.1a'
 
-setup(name='pyumysql',
+setup(name='umysqldb',
       version=version,
       packages=[
-          'pyumysql',
-          'pyumysql.constants',
-          'pyumysql.cursors'],
+          'umysqldb',
+          'umysqldb.constants'],
       install_requires=install_requires,
       # Metadata.
       description='Wrapper for ultamysql to provide minimum set of pymysql '
