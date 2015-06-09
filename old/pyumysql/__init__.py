@@ -15,7 +15,6 @@
 import umysql
 import logging
 from umysql import SQLError
-from .converters import escape_dict, escape_sequence, escape_string
 
 logger = logging.getLogger()
 

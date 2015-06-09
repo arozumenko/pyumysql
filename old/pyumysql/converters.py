@@ -1,12 +1,9 @@
-from ._compat import PY2, text_type, long_type, JYTHON, IRONPYTHON
-
-import sys
-import binascii
 import datetime
 from decimal import Decimal
 import re
 import time
 
+from .old.pyumysql._compat import PY2, text_type, long_type, JYTHON, IRONPYTHON
 from .constants import FIELD_TYPE, FLAG
 from .charset import charset_by_id, charset_to_encoding
 
