@@ -27,7 +27,7 @@ class Connection(object):
         self.cursorclass = cursorclass
         self._connection = None
         self._connect()
-        self.res = None
+        self._result = None
 
     def _connect(self):
         self._connection = umysql.Connection()
@@ -91,10 +91,6 @@ class Connection(object):
                 sql = sql.encode(self.charset)
             else:
                 sql = sql.encode(self.charset, 'surrogateescape')
-        self.res = self._connection.query(sql)
-
-
-
-
+        self._result = self._connection.query(sql)
 
 
