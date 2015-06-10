@@ -264,10 +264,12 @@ class Cursor(object):
     def _query(self, q):
         conn = self._get_db()
         self._last_executed = q
-        LOGGER.info("Query %s " % str(q))
-        conn.query(q)
+        try:
+            conn.query(q)
+        except:
+            LOGGER.info("Query %s " % str(q))
+            raise
         self._do_get_result()
-        LOGGER.info("Result %s " % str(self._rows))
         return self.rowcount
 
     def _do_get_result(self):
