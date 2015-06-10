@@ -298,6 +298,8 @@ class DictCursorMixin(object):
     def _do_get_result(self):
         super(DictCursorMixin, self)._do_get_result()
         self._rows = list()
+        if isinstance(self._result, tuple):
+            return self._result
         for each in self._result.rows:
             tmp_res = dict()
             for index, fld in enumerate(self._result.fields):
