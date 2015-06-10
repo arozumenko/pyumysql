@@ -269,8 +269,12 @@ class Cursor(object):
         conn = self._get_db()
         self.rownumber = 0
         self._result = result = conn._result
-        self.rowcount = len(result.rows)
-        self._rows = result.rows
+        if isinstance(self._result, tuple):
+            self.rowcount = 1
+            self._rows = result
+        else:
+            self.rowcount = len(result.rows)
+            self._rows = result.rows
 
     def __iter__(self):
         return iter(self.fetchone, None)
