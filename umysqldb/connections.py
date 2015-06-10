@@ -86,6 +86,10 @@ class Connection(object):
             return cursor(self)
         return self.cursorclass(self)
 
+    def escape_string(self, s):
+        return "'" + s.replace("'", "\\'") + "'"
+
+
     def query(self, sql):
         if isinstance(sql, text_type) and not (JYTHON or IRONPYTHON):
             encoding = self.charset if not 'utf8' in self.charset  else 'utf8'
