@@ -51,7 +51,8 @@ class Connection(object):
     def escape(self, obj, mapping=None):
         """Escape whatever value you pass to it"""
         if isinstance(obj, str_type):
-            return "'" + str(obj) + "'"
+            if "'" in obj:
+                return "'" + obj.replace("'", "/'") + "'"
         return escape_item(obj, self.charset, mapping=mapping)
 
     def is_succsess(self, res):
