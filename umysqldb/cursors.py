@@ -1,5 +1,5 @@
 import re
-import warnings
+import logging
 
 from umysqldb import err
 from umysqldb._compat import range_type, text_type, PY2
@@ -8,6 +8,7 @@ from umysqldb._compat import range_type, text_type, PY2
 RE_INSERT_VALUES = re.compile(r"""(INSERT\s.+\sVALUES\s+)(\(\s*%s\s*(?:,\s*%s\s*)*\))(\s*(?:ON DUPLICATE.*)?)\Z""",
                               re.IGNORECASE | re.DOTALL)
 
+LOGGER = logging.getLogger()
 
 class Cursor(object):
     '''This is the object you use to interact with the database.'''
@@ -265,6 +266,8 @@ class Cursor(object):
         self._last_executed = q
         conn.query(q)
         self._do_get_result()
+        LOGGER.info("Query %s " % str(q))
+        LOGGER.info("Result %s " % str(self._result))
         return self.rowcount
 
     def _do_get_result(self):

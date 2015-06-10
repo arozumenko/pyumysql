@@ -87,10 +87,11 @@ class Connection(object):
 
     def query(self, sql):
         if isinstance(sql, text_type) and not (JYTHON or IRONPYTHON):
+            encoding = self.charset if not 'utf8' in self.charset  else 'utf8'
             if PY2:
-                sql = sql.encode(self.charset)
+                sql = sql.encode(encoding)
             else:
-                sql = sql.encode(self.charset, 'surrogateescape')
+                sql = sql.encode(encoding, 'surrogateescape')
         self._result = self._connection.query(sql)
 
 
