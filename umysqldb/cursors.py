@@ -267,7 +267,7 @@ class Cursor(object):
         LOGGER.info("Query %s " % str(q))
         conn.query(q)
         self._do_get_result()
-        LOGGER.info("Result %s " % str(self._result))
+        LOGGER.info("Result %s " % str(self._rows))
         return self.rowcount
 
     def _do_get_result(self):
