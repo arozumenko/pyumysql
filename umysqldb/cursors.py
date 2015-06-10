@@ -97,6 +97,8 @@ class Cursor(object):
 
         if PY2:  # Use bytes on Python 2 always
             encoding = conn.charset
+            if 'utf8' in encoding:
+                encoding = 'utf8'
 
             def ensure_bytes(x):
                 if isinstance(x, unicode):
