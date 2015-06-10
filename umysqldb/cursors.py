@@ -271,7 +271,7 @@ class Cursor(object):
         self._result = result = conn._result
         if isinstance(self._result, tuple):
             self.rowcount = 1
-            self._rows = result
+            self._rows = [result]
         else:
             self.rowcount = len(result.rows)
             self._rows = result.rows
