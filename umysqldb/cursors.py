@@ -32,6 +32,7 @@ class Cursor(object):
         self._executed = None
         self._result = None
         self._rows = None
+        self.lastrowid = None
 
     def close(self):
         '''
