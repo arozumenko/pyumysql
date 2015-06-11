@@ -52,7 +52,7 @@ class Connection(object):
         """Escape whatever value you pass to it"""
         if isinstance(obj, str_type):
             if "'" in obj:
-                return "'" + obj.replace("'", "\\'") + "'"
+                return "'" + self.escape_string(obj) + "'"
         return escape_item(obj, self.charset, mapping=mapping)
 
     def is_succsess(self, res):
@@ -87,7 +87,7 @@ class Connection(object):
         return self.cursorclass(self)
 
     def escape_string(self, s):
-        return "'" + s.replace("'", "\\'") + "'"
+        return escape_string(s)
 
 
     def query(self, sql):
