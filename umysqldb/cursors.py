@@ -279,9 +279,16 @@ class Cursor(object):
         if isinstance(self._result, tuple):
             self.rowcount = 1
             self._rows = [result]
+            self.lastrowid = self._get_last_inserted_id()
         else:
             self.rowcount = len(result.rows)
             self._rows = result.rows
+            self.lastrowid = self._get_last_inserted_id()
+
+    def _get_last_inserted_id(self):
+        conn = self._get_db()
+        conn.query('SELECT LAST_INSERT_ID();')
+        return 0 if not isinstance(conn._result, tuple) else conn._result[0]
 
     def __iter__(self):
         return iter(self.fetchone, None)
