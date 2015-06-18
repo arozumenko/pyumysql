@@ -1,7 +1,22 @@
-__author__ = 'arozumenko'
+#  Copyright (c) 2015 Artem Rozumenko (artyom.rozumenko@gmail.com)
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+__author__ = 'Artem Rozumenko - artyom.rozumenko@gmail.com'
+
 import umysql
 from umysqldb.cursors import Cursor
-from umysqldb._compat import PY2, range_type, text_type, str_type, \
+from umysqldb._compat import PY2, text_type, str_type, \
     JYTHON, IRONPYTHON
 from umysqldb.converters import escape_item, escape_string
 from umysqldb import err
@@ -92,7 +107,7 @@ class Connection(object):
 
     def query(self, sql):
         if isinstance(sql, text_type) and not (JYTHON or IRONPYTHON):
-            encoding = self.charset if not 'utf8' in self.charset  else 'utf8'
+            encoding = self.charset if not 'utf8' in self.charset else 'utf8'
             if PY2:
                 sql = sql.encode(encoding)
             else:

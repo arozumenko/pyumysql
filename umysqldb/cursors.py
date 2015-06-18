@@ -93,7 +93,8 @@ class Cursor(object):
         """
         Returns the exact string that is sent to the database by calling the
         execute() method.
-        This method follows the extension to the DB API 2.0 followed by Psycopg.
+        This method follows the extension to the DB API 2.0
+        followed by Psycopg.
         """
         conn = self._get_db()
 
@@ -113,7 +114,8 @@ class Cursor(object):
                 if isinstance(args, (tuple, list)):
                     args = tuple(map(ensure_bytes, args))
                 elif isinstance(args, dict):
-                    args = dict((ensure_bytes(key), ensure_bytes(val)) for (key, val) in args.items())
+                    args = dict((ensure_bytes(key), ensure_bytes(val)) for
+                                (key, val) in args.items())
                 else:
                     args = ensure_bytes(args)
 
@@ -321,8 +323,10 @@ class DictCursorMixin(object):
                 tmp_res[fld[0]] = each[index]
             self._rows.append(tmp_res)
 
+
 class DictCursor(DictCursorMixin, Cursor):
     """A cursor which returns results as a dictionary"""
+
 
 class BaseCursor(Cursor):
     """Cursor just with a different name"""

@@ -1,9 +1,4 @@
-MBLENGTH = {
-        8:1,
-        33:3,
-        88:2,
-        91:2
-        }
+MBLENGTH = {8: 1, 33: 3, 88: 2, 91: 2}
 
 
 class Charset(object):

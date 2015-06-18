@@ -1,7 +1,5 @@
 from ._compat import PY2, text_type, long_type, JYTHON, IRONPYTHON
 
-import sys
-import binascii
 import datetime
 from decimal import Decimal
 import re
@@ -99,9 +97,11 @@ def escape_time(obj, mapping=None):
 
 def escape_datetime(obj, mapping=None):
     if obj.microsecond:
-        fmt = "'{0.year:04}-{0.month:02}-{0.day:02} {0.hour:02}:{0.minute:02}:{0.second:02}.{0.microsecond:06}'"
+        fmt = "'{0.year:04}-{0.month:02}-{0.day:02} {0.hour:02}:" \
+              "{0.minute:02}:{0.second:02}.{0.microsecond:06}'"
     else:
-        fmt = "'{0.year:04}-{0.month:02}-{0.day:02} {0.hour:02}:{0.minute:02}:{0.second:02}'"
+        fmt = "'{0.year:04}-{0.month:02}-{0.day:02} {0.hour:02}:" \
+              "{0.minute:02}:{0.second:02}'"
     return fmt.format(obj)
 
 def escape_date(obj, mapping=None):
@@ -113,14 +113,14 @@ def escape_struct_time(obj, mapping=None):
 
 def convert_datetime(obj):
     """Returns a DATETIME or TIMESTAMP column value as a datetime object:
-      >>> datetime_or_None('2007-02-25 23:06:20')
+      datetime_or_None('2007-02-25 23:06:20')
       datetime.datetime(2007, 2, 25, 23, 6, 20)
-      >>> datetime_or_None('2007-02-25T23:06:20')
+      datetime_or_None('2007-02-25T23:06:20')
       datetime.datetime(2007, 2, 25, 23, 6, 20)
     Illegal values are returned as None:
-      >>> datetime_or_None('2007-02-31T23:06:20') is None
+      datetime_or_None('2007-02-31T23:06:20') is None
       True
-      >>> datetime_or_None('0000-00-00 00:00:00') is None
+      datetime_or_None('0000-00-00 00:00:00') is None
       True
     """
     if ' ' in obj:
@@ -136,19 +136,20 @@ def convert_datetime(obj):
         if '.' in hms:
             hms, usecs = hms.split('.')
         usecs = float('0.' + usecs) * 1e6
-        return datetime.datetime(*[ int(x) for x in ymd.split('-')+hms.split(':')+[usecs] ])
+        return datetime.datetime(*[ int(x) for x in ymd.split('-')+
+                                    hms.split(':')+[usecs] ])
     except ValueError:
         return convert_date(obj)
 
 
 def convert_timedelta(obj):
     """Returns a TIME column as a timedelta object:
-      >>> timedelta_or_None('25:06:17')
+      timedelta_or_None('25:06:17')
       datetime.timedelta(1, 3977)
-      >>> timedelta_or_None('-25:06:17')
+      timedelta_or_None('-25:06:17')
       datetime.timedelta(-2, 83177)
     Illegal values are returned as None:
-      >>> timedelta_or_None('random crap') is None
+      timedelta_or_None('random crap') is None
       True
     Note that MySQL always returns TIME columns as (+|-)HH:MM:SS, but
     can accept values as (+|-)DD HH:MM:SS. The latter format will not
@@ -176,12 +177,12 @@ def convert_timedelta(obj):
 
 def convert_time(obj):
     """Returns a TIME column as a time object:
-      >>> time_or_None('15:06:17')
+      time_or_None('15:06:17')
       datetime.time(15, 6, 17)
     Illegal values are returned as None:
-      >>> time_or_None('-25:06:17') is None
+      time_or_None('-25:06:17') is None
       True
-      >>> time_or_None('random crap') is None
+      time_or_None('random crap') is None
       True
     Note that MySQL always returns TIME columns as (+|-)HH:MM:SS, but
     can accept values as (+|-)DD HH:MM:SS. The latter format will not
@@ -204,12 +205,12 @@ def convert_time(obj):
 
 def convert_date(obj):
     """Returns a DATE column as a date object:
-      >>> date_or_None('2007-02-26')
+      date_or_None('2007-02-26')
       datetime.date(2007, 2, 26)
     Illegal values are returned as None:
-      >>> date_or_None('2007-02-31') is None
+      date_or_None('2007-02-31') is None
       True
-      >>> date_or_None('0000-00-00') is None
+      date_or_None('0000-00-00') is None
       True
     """
     try:
@@ -221,15 +222,15 @@ def convert_date(obj):
 def convert_mysql_timestamp(timestamp):
     """Convert a MySQL TIMESTAMP to a Timestamp object.
     MySQL >= 4.1 returns TIMESTAMP in the same format as DATETIME:
-      >>> mysql_timestamp_converter('2007-02-25 22:32:17')
+      mysql_timestamp_converter('2007-02-25 22:32:17')
       datetime.datetime(2007, 2, 25, 22, 32, 17)
     MySQL < 4.1 uses a big string of numbers:
-      >>> mysql_timestamp_converter('20070225223217')
+      mysql_timestamp_converter('20070225223217')
       datetime.datetime(2007, 2, 25, 22, 32, 17)
     Illegal values are returned as None:
-      >>> mysql_timestamp_converter('2007-02-31 22:32:17') is None
+      mysql_timestamp_converter('2007-02-31 22:32:17') is None
       True
-      >>> mysql_timestamp_converter('00000000000000') is None
+      mysql_timestamp_converter('00000000000000') is None
       True
     """
     if timestamp[4] == '-':
@@ -251,12 +252,6 @@ def through(x):
     return x
 
 
-#def convert_bit(b):
-#    b = "\x00" * (8 - len(b)) + b # pad w/ zeroes
-#    return struct.unpack(">Q", b)[0]
-#    
-#     the snippet above is right, but MySQLdb doesn't process bits,
-#     so we shouldn't either
 convert_bit = through
 
 
